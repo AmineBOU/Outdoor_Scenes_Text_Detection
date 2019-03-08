@@ -19,3 +19,5 @@ Exectuting code:
 ### EAST & SWT Comparison
 To compare the two approaches, it is possible to execute the <code>main.py</code> :
 <code>python main.py</code>
+
+The comparison is made by computing the Dice and Jaccard coefficients. 
