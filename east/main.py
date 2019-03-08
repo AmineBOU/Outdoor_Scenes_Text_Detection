@@ -2,6 +2,8 @@
 import cv2 as cv
 import math
 import argparse
+import numpy as np
+import ntpath
 
 ############ Add argument parser for command line arguments ############
 parser = argparse.ArgumentParser(description='Use this script to run TensorFlow implementation (https://github.com/argman/EAST) of EAST: An Efficient and Accurate Scene Text Detector (https://arxiv.org/abs/1704.03155v2)')
@@ -87,7 +89,7 @@ def main():
 
     # Create a new named window
     kWinName = "EAST: An Efficient and Accurate Scene Text Detector"
-    cv.namedWindow(kWinName, cv.WINDOW_NORMAL)
+    #cv.namedWindow(kWinName, cv.WINDOW_NORMAL)
     outNames = []
     outNames.append("feature_fusion/Conv_7/Sigmoid")
     outNames.append("feature_fusion/concat_3")
@@ -122,6 +124,8 @@ def main():
         geometry = outs[1]
         [boxes, confidences] = decode(scores, geometry, confThreshold)
 
+       	mask = np.zeros(frame.shape[:2])
+
         # Apply NMS
         indices = cv.dnn.NMSBoxesRotated(boxes, confidences, confThreshold,nmsThreshold)
         for i in indices:
@@ -135,12 +139,13 @@ def main():
                 p1 = (vertices[j][0], vertices[j][1])
                 p2 = (vertices[(j + 1) % 4][0], vertices[(j + 1) % 4][1])
                 cv.line(frame, p1, p2, (0, 255, 0), 1);
-
+            mask = cv.drawContours(mask, np.int32([vertices]), 0, 255, thickness = -1)
+        cv.imwrite('./results/east/' + ntpath.basename(args.input)[:-4]  + '_east_mask.png', mask)
         # Put efficiency information
         cv.putText(frame, label, (0, 15), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0))
 
         # Display the frame
-        cv.imshow(kWinName,frame)
+        cv.imshow(kWinName, frame)
 
 if __name__ == "__main__":
     main()
