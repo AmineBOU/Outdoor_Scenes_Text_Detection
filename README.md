@@ -14,3 +14,7 @@ Exectuting code:
 
 Exectuting code:
 <code>python east/main.py --input IMG_0839.JPG --model east/frozen_east_text_detection.pb</code>
+
+### EAST & SWT Comparison
+To compare the two approaches, it is possible to execute the <code>main.py</code> :
+<code>python main.py</code>
