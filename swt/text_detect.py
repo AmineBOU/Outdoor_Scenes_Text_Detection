@@ -2,6 +2,7 @@
 import argparse
 import os
 import sys
+import ntpath
 
 import numpy as np
 from PIL import Image
@@ -56,6 +57,7 @@ def pltShow(*images):
 		plt.title(images[i][1])
 	plt.show()
 
+# Text Detection Class
 class TextDetection(object):
 
 	def __init__(self, image_path):
@@ -333,16 +335,24 @@ class TextDetection(object):
 			cv2.rectangle(res, (b[0], b[1]), (b[2], b[3]), 255, -1)
 
 		# pltShow((img, "Original"), (bounded, "Boxes"), (res, "Mask"))
+		#cv2.imsave('swt_mask.png', res)
 		return bounded, res
 
+# ----------------- Main ----------------- #
 if IMAGE_PATH:
 	td = TextDetection(IMAGE_PATH)
 	if FULL_OCR:
 		bounded, res = td.fullOCR()
+		cv2.imwrite('swt_mask.png', res)
 		pltShow((td.img, "Original"), (bounded, "Final"), (res, "Mask"))
+		
+
 	else:
 		res = td.detect()
-		pltShow((td.img, "Original"), (td.final, "Final"), (res, "Mask"))
+		#pltShow((td.img, "Original"), (td.final, "Final"), (res, "Mask"))
+		cv2.imwrite('./results/swt/'+ntpath.basename(IMAGE_PATH)[:-4] + '_swt_mask.png', res)
 		if OUTPUT_PATH:
 			plt.imsave(OUTPUT_PATH, td.final)
+			cv2.imwrite('swt_mask.png', res)
 			print("{} saved".format(OUTPUT_PATH))
+			
