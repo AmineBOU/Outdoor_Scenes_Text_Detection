@@ -1,5 +1,6 @@
 # Outdoor_Scenes_Text_Detection
 
+<center><img src='results/example.jpg'></center>
 Text Detection, Natural Image, Arbitrary Orientation, MSRA Text Detection 500 Database
 
 This repository presents two ways to deal with text detection : SWT and EAST.
